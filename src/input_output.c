@@ -1,0 +1,1 @@
+// Funkcje czytające/wyświetlające w terminalu

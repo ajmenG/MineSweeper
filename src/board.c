@@ -1,0 +1,1 @@
+// Obsługa planszy (generowanie, odkrywanie pól itp.)
