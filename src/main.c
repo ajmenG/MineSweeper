@@ -9,15 +9,19 @@
 #include "../include/parse_file.h"
 #include <bits/getopt_core.h>
 
+extern int revealed;
+
 void print_usage(const char *prog_name)
 {
     printf("Usage: %s [-f x y] [-r x y]\n", prog_name);
 }
 
+int run = 1;
+
+int fail = 0;
+
 int main(int argc, char *argv[])
 {
-    int run = 1;
-
     int rows, cols, difficulty, mines;
     printf("Podaj poziom trudności (1-3): ");
     scanf("%d", &difficulty);
@@ -58,6 +62,7 @@ int main(int argc, char *argv[])
         int x, y;
 
         printf("Podaj komendę: ");
+    
         scanf(" %c %d %d", &command, &x, &y);
         if (licznik == 1)
         {
@@ -82,6 +87,17 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
+    if (fail)
+    {
+        printf("Przegrałeś\n");
+    }
+    else
+    {
+        printf("Wygrałeś\n");
+    }
+    
+    printf("Twój wynik to: %d\n", difficulty * revealed);
 
     return 0;
 }

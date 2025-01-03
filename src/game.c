@@ -4,6 +4,8 @@
 #include <time.h>
 #include "../include/game.h"
 
+int revealed = 0;
+
 // sprawdzenie, czy pole jest na planszy
 int is_valid(Board *board, int row, int col)
 {
@@ -21,9 +23,14 @@ int reveal_field(Board *board, int row, int col)
     {
         return 0;
     }
+    if (board->grid[row][col].is_revealed && board->rows * board->cols - revealed == board->mine_count)
+    {
+        run = 0;
+        fail = 0;
+    }
     if (board->grid[row][col].is_mine)
     {
-        return -1;
+        reveal_all_mines(board);
     }
     board->grid[row][col].is_revealed = 1;
     if (board->grid[row][col].mines_in_neighborhood == 0)
@@ -40,7 +47,7 @@ int reveal_field(Board *board, int row, int col)
 }
 
 // oznaczenie pola flagą
-void flag_field(Board *board, int row, int col)
+void flag_field(Board *board, int row, int col) // Dodano tę linijkę
 {
     if (!is_valid(board, row, col))
     {
@@ -51,4 +58,25 @@ void flag_field(Board *board, int row, int col)
         return;
     }
     board->grid[row][col].is_flagged = !board->grid[row][col].is_flagged;
+}
+
+// przegrana
+void reveal_all_mines(Board *board)
+{
+    for (int i = 0; i < board->rows; i++)
+    {
+        for (int j = 0; j < board->cols; j++)
+        {
+            if (board->grid[i][j].is_revealed)
+            {
+                revealed++;
+            }
+            if (board->grid[i][j].is_mine)
+            {
+                board->grid[i][j].is_revealed = 1;
+            }
+        }
+    }
+    run = 0;
+    fail = 1;
 }
