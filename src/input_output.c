@@ -5,35 +5,35 @@
 // wyświetlanie planszy
 void print_board(Board *board)
 {
-    printf("  ");
+    printf("   ");
     for (int i = 0; i < board->cols; i++)
     {
-        printf("%d ", i + 1);
+        printf("%2d ", i + 1);
     }
     printf("\n");
     for (int i = 0; i < board->rows; i++)
     {
-        printf("%d ", i + 1);
+        printf("%2d ", i + 1);
         for (int j = 0; j < board->cols; j++)
         {
             if (board->grid[i][j].is_revealed)
             {
                 if (board->grid[i][j].is_mine)
                 {
-                    printf("X ");
+                    printf(" X ");
                 }
                 else
                 {
-                    printf("%d ", board->grid[i][j].mines_in_neighborhood);
+                    printf("%2d ", board->grid[i][j].mines_in_neighborhood);
                 }
             }
             else if (board->grid[i][j].is_flagged)
             {
-                printf("F ");
+                printf(" F ");
             }
             else
             {
-                printf(". ");
+                printf(" . ");
             }
         }
         printf("\n");

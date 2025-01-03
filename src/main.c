@@ -27,24 +27,26 @@ int main(int argc, char *argv[])
             case 1:
                 rows = 9;
                 cols = 9;
+                mines = 10;
                 break;
             case 2:
                 rows = 16;
                 cols = 16;
+                mines = 40;
                 break;
             case 3:
                 rows = 16;
                 cols = 30;
+                mines = 99;
                 break;
         }   
-        
+
         if (difficulty < 1 || difficulty > 3)
         {
             printf("Niepoprawny poziom trudności\n");
             return EXIT_FAILURE;
         }
 
-        mines = rows * cols * difficulty / 10;
         Board *board = board_create(rows, cols, difficulty, mines);
         print_board(board);
     }
