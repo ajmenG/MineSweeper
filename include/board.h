@@ -1,4 +1,4 @@
-#ifndef BORAD_H
+#ifndef BOARD_H
 #define BOARD_H
 
 // pojedyncza komórka planszy
@@ -12,7 +12,7 @@ typedef struct
     int is_flagged;
     // liczba min w sąsiedztwie 3x3 od pola
     int mines_in_neighborhood;
-} cell_t;
+} Cell;
 
 // plansza
 typedef struct
@@ -27,15 +27,16 @@ typedef struct
     Cell **grid;
     // liczba min
     int mine_count;
-} board_t;
+
+} Board;
 
 // tworzenie planszy
 Board *board_create(int rows, int cols, int difficulty, int mines);
 
-int reveal_field(Board *board, int row, int col);
+// generowanie min
+void generate_mines(Board *board, int row, int col);
 
-void flag_field(Board *board, int row, int col);
-
+// obliczanie min w sasiedztwie pola
 int calculate_mines_in_neighborhood(Board *board, int row, int col);
 
 #endif // BOARD_H
