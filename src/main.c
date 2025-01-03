@@ -16,7 +16,7 @@ void print_usage(const char *prog_name)
 
 int main(int argc, char *argv[])
 {
-    int opt;
+    int run = 1;
 
     int rows, cols, difficulty, mines;
     printf("Podaj poziom trudności (1-3): ");
@@ -50,16 +50,28 @@ int main(int argc, char *argv[])
     Board *board = board_create(rows, cols, difficulty, mines);
     print_board(board);
         
-    while ((opt = getopt(argc, argv, "f:r:"))){
-        switch (opt)
+    while (run){
+        char command;
+        int x, y;
+
+        printf("Podaj komendę: ");
+        scanf(" %c %d %d", &command, &x, &y);
+
+        switch (command)
         {
             case 'f':
-                flag_field(board, 6, 6);
+                flag_field(board, x - 1, y - 1);
+                printf("\n");
                 print_board(board);
                 break;
             case 'r':
-                reveal_field(board, 8, 8);
+                reveal_field(board, x - 1, y - 1);
+                printf("\n");
                 print_board(board);
+                break;
+            default:
+                printf("Niepoprawna komenda\n");
+                run = 0;
                 break;
         }
     }
