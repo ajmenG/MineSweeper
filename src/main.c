@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
         int x, y;
 
         printf("Podaj komendę: ");
-    
+
         scanf(" %c %d %d", &command, &x, &y);
         if (licznik == 1)
         {
@@ -81,9 +81,13 @@ int main(int argc, char *argv[])
             printf("\n");
             print_board(board);
             break;
+        case 'x': // dodalem x zeby zakonczyc gre
+            fail = 1;
+            run = 0;
+            break;
         default:
             printf("Niepoprawna komenda\n");
-            run = 0;
+            // run = 0; - to zakancza gre jak ktos popsuje to nie moze tak byc
             break;
         }
     }
@@ -96,7 +100,7 @@ int main(int argc, char *argv[])
     {
         printf("Wygrałeś\n");
     }
-    
+
     printf("Twój wynik to: %d\n", difficulty * revealed);
 
     return 0;
