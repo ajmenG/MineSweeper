@@ -8,12 +8,12 @@ void print_board(Board *board)
     printf("  ");
     for (int i = 0; i < board->cols; i++)
     {
-        printf("%d ", i);
+        printf("%d ", i + 1);
     }
     printf("\n");
     for (int i = 0; i < board->rows; i++)
     {
-        printf("%d ", i);
+        printf("%d ", i + 1);
         for (int j = 0; j < board->cols; j++)
         {
             if (board->grid[i][j].is_revealed)

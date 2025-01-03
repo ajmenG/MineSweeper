@@ -19,13 +19,25 @@ int main(int argc, char *argv[])
     if (argc == 1)
     {
         int rows, cols, difficulty, mines;
-        printf("Podaj liczbę wierszy: ");
-        scanf("%d", &rows);
-        printf("Podaj liczbę kolumn: ");
-        scanf("%d", &cols);
         printf("Podaj poziom trudności (1-3): ");
-
         scanf("%d", &difficulty);
+
+        switch (difficulty)
+        {
+            case 1:
+                rows = 9;
+                cols = 9;
+                break;
+            case 2:
+                rows = 16;
+                cols = 16;
+                break;
+            case 3:
+                rows = 16;
+                cols = 30;
+                break;
+        }   
+        
         if (difficulty < 1 || difficulty > 3)
         {
             printf("Niepoprawny poziom trudności\n");
