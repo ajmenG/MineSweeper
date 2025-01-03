@@ -22,9 +22,13 @@ void print_board(Board *board)
                 {
                     printf(" X ");
                 }
-                else
+                else if (board->grid[i][j].mines_in_neighborhood > 0)
                 {
                     printf("%2d ", board->grid[i][j].mines_in_neighborhood);
+                }
+                else
+                {
+                    printf("   ");
                 }
             }
             else if (board->grid[i][j].is_flagged)

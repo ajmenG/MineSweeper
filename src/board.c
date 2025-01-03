@@ -30,10 +30,59 @@ Board *board_create(int rows, int cols, int difficulty, int mines)
 // generowanie min
 void generate_mines(Board *board, int row, int col)
 {
+    srand(time(NULL));
+    int mines = board->mine_count;
+    while (mines > 0)
+    {
+        int r = rand() % board->rows;
+        int c = rand() % board->cols;
+        if ((r == row && c == col) ||
+            (r - 1 == row && c - 1 == col) ||
+            (r - 1 == row && c == col) ||
+            (r - 1 == row && c + 1 == col) ||
+            (r == row && c - 1 == col) ||
+            (r == row && c + 1 == col) ||
+            (r + 1 == row && c - 1 == col) ||
+            (r + 1 == row && c == col) ||
+            (r + 1 == row && c + 1 == col))
+        {
+            continue;
+        }
+        if (board->grid[r][c].is_mine)
+        {
+            continue;
+        }
+        board->grid[r][c].is_mine = 1;
+        mines--;
+    }
 }
 
-// obliczanie min w sasiedztwie pola
-int calculate_mines_in_neighborhood(Board *board, int row, int col)
+// obliczanie wszystkich min w sasiedztwie kazdego pola
+int calculate_mines_in_neighborhood(Board *board)
 {
+    for (int i = 0; i < board->rows; i++)
+    {
+        for (int j = 0; j < board->cols; j++)
+        {
+            board->grid[i][j].mines_in_neighborhood = count_mines(board, i, j);
+        }
+    }
     return 0;
+}
+
+// zliczanie min w sasiedztwie pola
+int count_mines(Board *board, int row, int col)
+{
+    int count = 0;
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            if (is_valid(board, row + i, col + j) && board->grid[row + i][col + j].is_mine)
+            {
+                count++;
+            }
+        }
+    }
+    return count;
 }

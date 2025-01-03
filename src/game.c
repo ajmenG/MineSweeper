@@ -26,7 +26,7 @@ int reveal_field(Board *board, int row, int col)
         return -1;
     }
     board->grid[row][col].is_revealed = 1;
-    if (board->grid[row][col].mines_in_neighborhood == 0) //to powinno rekruencyjnie odkrywać sąsiednie pola az do napotkania takich z minami w sasiedztwie lub scian
+    if (board->grid[row][col].mines_in_neighborhood == 0)
     {
         for (int i = -1; i <= 1; i++)
         {

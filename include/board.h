@@ -36,7 +36,10 @@ Board *board_create(int rows, int cols, int difficulty, int mines);
 // generowanie min
 void generate_mines(Board *board, int row, int col);
 
-// obliczanie min w sasiedztwie pola
-int calculate_mines_in_neighborhood(Board *board, int row, int col);
+// obliczanie wszystkich min w sasiedztwie kazdego pola
+int calculate_mines_in_neighborhood(Board *board);
+
+// zliczanie min w sasiedztwie pola
+int count_mines(Board *board, int row, int col);
 
 #endif // BOARD_H
