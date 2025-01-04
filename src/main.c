@@ -131,7 +131,29 @@ int main(int argc, char *argv[])
         printf("Wygrałeś!!!, gratulacje\n");
     }
 
-    printf("Twój wynik to: %d\n", score(board, difficulty));
+    printf("Twój wynik to: %d\n\n", score(board, difficulty));
+
+    char odp;
+    char nickname[20];
+    printf("Czy chcesz zapisać wynik? (t/n): ");
+    scanf(" %c", &odp);
+    switch (odp)
+    {
+    case 't':
+        printf("Podaj nick: ");
+        scanf("%s", nickname);
+        save_score(nickname, score(board, difficulty));
+        printf("Dziękujemy za grę\n\n");
+        break;
+    case 'n':
+        printf("Dziękujemy za grę\n\n");
+        break;
+    default:
+        printf("Niepoprawna komenda\n");
+        break;
+    }
+
+    display_scores();
 
     return 0;
 }
