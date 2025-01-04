@@ -11,17 +11,14 @@
 
 extern int revealed;
 
-void print_usage(const char *prog_name)
-{
-    printf("Usage: %s [-f x y] [-r x y]\n", prog_name);
-}
-
 int run = 1;
 
 int fail = 0;
 
 int main(int argc, char *argv[])
 {
+    rules();
+
     int rows, cols, difficulty, mines;
     printf("Podaj poziom trudności (1-3): ");
     scanf("%d", &difficulty);
@@ -55,53 +52,86 @@ int main(int argc, char *argv[])
     print_board(board);
 
     int licznik = 0;
+
     while (run)
     {
-        licznik++;
         char command;
         int x, y;
 
         printf("Podaj komendę: ");
-
-        scanf(" %c %d %d", &command, &x, &y);
-        if (licznik == 1)
+        if (scanf(" %c", &command) != 1) // Sprawdzenie, czy wczytano komendę
         {
-            generate_mines(board, x - 1, y - 1);
-            calculate_mines_in_neighborhood(board);
+            printf("Niepoprawna komenda\n");
+            while (getchar() != '\n'); // Wyczyść bufor wejściowy
+            continue;
         }
-        switch (command)
+
+        if (command == 'x') // Sprawdzenie komendy 'x' przed wczytaniem współrzędnych
         {
-        case 'f':
-            flag_field(board, x - 1, y - 1);
-            printf("\n");
-            print_board(board);
-            break;
-        case 'r':
-            reveal_field(board, x - 1, y - 1);
-            printf("\n");
-            print_board(board);
-            break;
-        case 'x': // dodalem x zeby zakonczyc gre
             fail = 1;
             run = 0;
             break;
-        default:
-            printf("Niepoprawna komenda\n");
-            // run = 0; - to zakancza gre jak ktos popsuje to nie moze tak byc
-            break;
         }
+
+        if (command == 'f' || command == 'd' || command == 'r') {
+            if (scanf("%d %d", &x, &y) != 2) // Sprawdzenie, czy wczytano dwie współrzędne
+            {
+                printf("Brak współrzędnych\n");
+                while (getchar() != '\n'); // Wyczyść bufor wejściowy
+                continue;
+            }
+
+            if (x < 1 || x > rows || y < 1 || y > cols)
+            {
+                printf("Niepoprawne współrzędne\n");
+                continue;
+            }
+
+            if (licznik == 0)
+            {
+                generate_mines(board, x - 1, y - 1);
+                calculate_mines_in_neighborhood(board);
+            }
+            licznik++;
+        }
+        else
+        {
+            printf("Niepoprawna komenda\n");
+            continue;
+        }
+
+        switch (command)
+        {
+            case 'f':
+                flag_field(board, x - 1, y - 1);
+                break;
+            case 'd':
+                remove_flag(board, x - 1, y - 1);
+                break;
+            case 'r':
+                reveal_field(board, x - 1, y - 1);
+                break;
+        }
+
+        printf("\n");
+        print_board(board);
+        if (count_revealed(board) == board->rows * board->cols - board->mine_count)
+        {
+            run = 0;
+        }
+        printf("Aktualny wynik: %d\n", score(board, difficulty));
     }
 
     if (fail)
     {
-        printf("Przegrałeś\n");
+        printf("Przegrałeś!!!!!\n");
     }
     else
     {
-        printf("Wygrałeś\n");
+        printf("Wygrałeś!!!, gratulacje\n");
     }
 
-    printf("Twój wynik to: %d\n", difficulty * revealed);
+    printf("Twój wynik to: %d\n", score(board, difficulty));
 
     return 0;
 }

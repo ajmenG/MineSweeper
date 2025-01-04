@@ -20,4 +20,10 @@ void flag_field(Board *board, int row, int col);
 // odkrywanie wszystkich min
 void reveal_all_mines(Board *board);
 
+// zliczanie odkrytych pól
+int count_revealed(Board *board);
+
+// wynik gracza
+int score(Board *board, int difficulty);
+
 #endif // GAME_H

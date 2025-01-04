@@ -9,4 +9,7 @@ void print_board(Board *board);
 // ruch gracza
 int get_user_move(Board *board, int *row, int *col, char *action);
 
+//zasady gry i mozliwe ruchy
+void rules();
+
 #endif // INPUT_OUTPUT_H

@@ -43,3 +43,20 @@ void print_board(Board *board)
         printf("\n");
     }
 }
+
+//zasady gry i mozliwe ruchy
+void rules()
+{
+    printf("Zasady gry:\n");
+    printf("1. Gra polega na odkrywaniu pól planszy.\n");
+    printf("2. Na planszy znajdują się miny, których liczba zależy od poziomu trudności.\n");
+    printf("3. Gracz wygrywa, gdy odkryje wszystkie pola bez min.\n");
+    printf("4. Gracz przegrywa, gdy odkryje pole z miną.\n");
+    printf("5. Gracz może oznaczać pola flagą.\n");
+    printf("6. Gracz wygrywa, gdy oznaczy wszystkie miny.\n");
+    printf("7. Gracz przegrywa, gdy oznaczy pole bez miny.\n");
+    printf("8. Gracz może odkryć pole wpisując  'r' oraz współrzędne. (np. r 10 8)\n");
+    printf("9. Gracz może oznaczyć pole flagą wpisując 'f' oraz współrzędne. (np. f 10 8)\n");
+    printf("10. Gracz może usunąć flagę wpisując 'd' oraz współrzędne. (np. d 4 7)\n");
+    printf("11. Gracz może zakończyć grę w dowolnym momencie wpisując 'x'.\n\n");
+}
