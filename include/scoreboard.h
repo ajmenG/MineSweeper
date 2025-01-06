@@ -1,14 +1,19 @@
 #ifndef SCOREBOARD_H
 #define SCOREBOARD_H
-#define MAX_SCORES 5
+#define MAX_SCORES 100
 
 #include "board.h"
 #include "input_output.h"
 
+typedef struct {
+    char name[50];
+    int score;
+} ScoreEntry;
+
 // zapisywanie wyniku do pliku
 void save_score(char *nickname, int score);
 
-void load_scores(char names[MAX_SCORES][50], int scores[MAX_SCORES], int *count);
+void load_scores(ScoreEntry scores[MAX_SCORES], int *count);
 
 void display_scores();
 

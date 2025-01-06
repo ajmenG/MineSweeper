@@ -56,7 +56,7 @@ void interactive_mode()
     rules();
 
     int rows, cols, difficulty, mines;
-    printf("Podaj poziom trudności (1-3): ");
+    printf("Podaj poziom trudności (1-3) lub 4 (własny): ");
     scanf("%d", &difficulty);
 
     switch (difficulty)
@@ -76,9 +76,17 @@ void interactive_mode()
         cols = 30;
         mines = 99;
         break;
+    case 4:
+        printf("Podaj liczbę wierszy: ");
+        scanf("%d", &rows);
+        printf("Podaj liczbę kolumn: ");
+        scanf("%d", &cols);
+        printf("Podaj liczbę min: ");
+        scanf("%d", &mines);
+        break;
     }
 
-    if (difficulty < 1 || difficulty > 3)
+    if (difficulty < 1 || difficulty > 4)
     {
         printf("Niepoprawny poziom trudności\n");
         return EXIT_FAILURE;

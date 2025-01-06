@@ -4,8 +4,6 @@
 #include <string.h>
 #include "../include/scoreboard.h"
 
-#define MAX_SCORES 5
-
 // zapisywanie wyniku do pliku
 void save_score(char *nickname, int score)
 {
@@ -28,7 +26,7 @@ void save_score(char *nickname, int score)
 }
 
 // wczytywanie najlepszych wyników z pliku
-void load_scores(char names[MAX_SCORES][50], int scores[MAX_SCORES], int *count)
+void load_scores(ScoreEntry scores[MAX_SCORES], int *count)
 {
     FILE *file = fopen("bin/scoreboard.txt", "r");
     if (file == NULL)
@@ -38,7 +36,7 @@ void load_scores(char names[MAX_SCORES][50], int scores[MAX_SCORES], int *count)
     }
 
     *count = 0;
-    while (*count < MAX_SCORES && fscanf(file, "%49s %d", names[*count], &scores[*count]) == 2)
+    while (*count < MAX_SCORES && fscanf(file, "%49s %d", scores[*count].name, &scores[*count].score) == 2)
     {
         (*count)++;
     }
@@ -52,42 +50,30 @@ void load_scores(char names[MAX_SCORES][50], int scores[MAX_SCORES], int *count)
 // funkcja porównująca wyniki do sortowania
 int compare_scores(const void *a, const void *b)
 {
-    int score_a = *(const int *)a;
-    int score_b = *(const int *)b;
+    int score_a = ((ScoreEntry *)a)->score;
+    int score_b = ((ScoreEntry *)b)->score;
     return score_b - score_a; // sortowanie malejąco
+}
+
+void sort_scores(ScoreEntry scores[MAX_SCORES], int count)
+{
+    qsort(scores, count, sizeof(ScoreEntry), compare_scores);
 }
 
 // wyświetlanie 5 najlepszych wyników
 void display_scores()
 {
-    char names[MAX_SCORES][50] = {0};
-    int scores[MAX_SCORES] = {0};
+    ScoreEntry scores[MAX_SCORES] = {0};
     int count = 0;
 
-    load_scores(names, scores, &count);
+    load_scores(scores, &count);
 
     // sortowanie wyników
-    for (int i = 0; i < count - 1; i++)
-    {
-        for (int j = 0; j < count - i - 1; j++)
-        {
-            if (scores[j] < scores[j + 1])
-            {
-                int temp_score = scores[j];
-                scores[j] = scores[j + 1];
-                scores[j + 1] = temp_score;
-
-                char temp_name[50];
-                strcpy(temp_name, names[j]);
-                strcpy(names[j], names[j + 1]);
-                strcpy(names[j + 1], temp_name);
-            }
-        }
-    }
+    sort_scores(scores, count);
 
     printf("Najlepsze wyniki:\n");
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < 5; i++)
     {
-        printf("%d. %s %d\n", i + 1, names[i], scores[i]);
+        printf("%d. %s %d\n", i + 1, scores[i].name, scores[i].score);
     }
 }
