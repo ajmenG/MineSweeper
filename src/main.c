@@ -15,7 +15,43 @@ int run = 1;
 
 int fail = 0;
 
+void interactive_mode();
+
+void file_mode();
+
+void print_usage(char *name);
+
 int main(int argc, char *argv[])
+{
+    int opt;
+    char *filename = NULL;
+    int flag_found = 0;
+
+    while ((opt = getopt(argc, argv, "f:")) != -1)
+    {
+        switch (opt)
+        {
+        case 'f':
+            filename = optarg;
+            printf("Nazwa pliku: %s\n", filename);
+            file_mode(filename);
+            flag_found = 1;
+            break;
+        default:
+            print_usage(argv[0]);
+            return EXIT_FAILURE;
+        }
+    }
+
+    if (!flag_found)
+    {
+        interactive_mode();
+    }
+
+    return 0;
+}
+
+void interactive_mode()
 {
     rules();
 
@@ -62,7 +98,8 @@ int main(int argc, char *argv[])
         if (scanf(" %c", &command) != 1) // Sprawdzenie, czy wczytano komendę
         {
             printf("Niepoprawna komenda\n");
-            while (getchar() != '\n'); // Wyczyść bufor wejściowy
+            while (getchar() != '\n')
+                ; // Wyczyść bufor wejściowy
             continue;
         }
 
@@ -73,11 +110,13 @@ int main(int argc, char *argv[])
             break;
         }
 
-        if (command == 'f' || command == 'd' || command == 'r') {
+        if (command == 'f' || command == 'd' || command == 'r')
+        {
             if (scanf("%d %d", &x, &y) != 2) // Sprawdzenie, czy wczytano dwie współrzędne
             {
                 printf("Brak współrzędnych\n");
-                while (getchar() != '\n'); // Wyczyść bufor wejściowy
+                while (getchar() != '\n')
+                    ; // Wyczyść bufor wejściowy
                 continue;
             }
 
@@ -102,15 +141,15 @@ int main(int argc, char *argv[])
 
         switch (command)
         {
-            case 'f':
-                flag_field(board, x - 1, y - 1);
-                break;
-            case 'd':
-                remove_flag(board, x - 1, y - 1);
-                break;
-            case 'r':
-                reveal_field(board, x - 1, y - 1);
-                break;
+        case 'f':
+            flag_field(board, x - 1, y - 1);
+            break;
+        case 'd':
+            remove_flag(board, x - 1, y - 1);
+            break;
+        case 'r':
+            reveal_field(board, x - 1, y - 1);
+            break;
         }
 
         printf("\n");
@@ -155,5 +194,19 @@ int main(int argc, char *argv[])
 
     display_scores();
 
-    return 0;
+    return;
+}
+
+void file_mode(char *filename)
+{
+    read_file(filename);
+    return;
+}
+
+void print_usage(char *name)
+{
+    printf("Użycie: %s [-f filename]\n", name);
+    printf("Uruchomienie gry w trybie interaktywnym: %s\n", name);
+    printf("Uruchomienie gry z pliku: %s -f filename\n", name);
+    return;
 }
