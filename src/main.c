@@ -7,7 +7,12 @@
 #include "../include/board.h"
 #include "../include/game.h"
 #include "../include/parse_file.h"
+#include "../include/input_output.h"
+#include "../include/scoreboard.h"
+#include "../include/tests.h"
 #include <bits/getopt_core.h>
+#include <getopt.h>
+#include <game.h>
 
 extern int revealed;
 
@@ -15,9 +20,11 @@ int run = 1;
 
 int fail = 0;
 
-void interactive_mode();
+int interactive_mode();
 
 void file_mode();
+
+void test_mode();
 
 void print_usage(char *name);
 
@@ -27,7 +34,7 @@ int main(int argc, char *argv[])
     char *filename = NULL;
     int flag_found = 0;
 
-    while ((opt = getopt(argc, argv, "f:")) != -1)
+    while ((opt = getopt(argc, argv, "f:t")) != -1)
     {
         switch (opt)
         {
@@ -35,6 +42,10 @@ int main(int argc, char *argv[])
             filename = optarg;
             printf("Nazwa pliku: %s\n", filename);
             file_mode(filename);
+            flag_found = 1;
+            break;
+        case 't':
+            test_mode();
             flag_found = 1;
             break;
         default:
@@ -45,13 +56,16 @@ int main(int argc, char *argv[])
 
     if (!flag_found)
     {
-        interactive_mode();
+        if (interactive_mode() == -1)
+        {
+            return EXIT_FAILURE;
+        }
     }
 
     return 0;
 }
 
-void interactive_mode()
+int interactive_mode()
 {
     rules();
 
@@ -86,10 +100,16 @@ void interactive_mode()
         break;
     }
 
+    if (mines >= rows * cols)
+    {
+        printf("Za dużo min\n");
+        return -1;
+    }
+
     if (difficulty < 1 || difficulty > 4)
     {
         printf("Niepoprawny poziom trudności\n");
-        return EXIT_FAILURE;
+        return -1;
     }
 
     Board *board = board_create(rows, cols, difficulty, mines);
@@ -202,19 +222,121 @@ void interactive_mode()
 
     display_scores();
 
-    return;
+    return 0;
 }
 
 void file_mode(char *filename)
 {
-    read_file(filename);
+    read_file(filename, fail);
     return;
 }
 
+void test_mode()
+{
+    int tests_passed = 0;
+    int tests_failed = 0;
+
+    printf("Running tests...\n");
+    if (test_board_create())
+    {
+        printf("test_board_create: PASSED\n");
+        tests_passed++;
+    }
+    else
+    {
+        printf("test_board_create: FAILED\n");
+        tests_failed++;
+    }
+
+    if (test_generate_mines())
+    {
+        printf("test_generate_mines: PASSED\n");
+        tests_passed++;
+    }
+    else
+    {
+        printf("test_generate_mines: FAILED\n");
+        tests_failed++;
+    }
+
+    if (test_calculate_mines_in_neighborhood())
+    {
+        printf("test_calculate_mines_in_neighborhood: PASSED\n");
+        tests_passed++;
+    }
+    else
+    {
+        printf("test_calculate_mines_in_neighborhood: FAILED\n");
+        tests_failed++;
+    }
+
+    if (test_count_mines())
+    {
+        printf("test_count_mines: PASSED\n");
+        tests_passed++;
+    }
+    else
+    {
+        printf("test_count_mines: FAILED\n");
+        tests_failed++;
+    }
+
+    if (test_flag_field())
+    {
+        printf("test_flag_field: PASSED\n");
+        tests_passed++;
+    }
+    else
+    {
+        printf("test_flag_field: FAILED\n");
+        tests_failed++;
+    }
+
+    if (test_remove_flag())
+    {
+        printf("test_remove_flag: PASSED\n");
+        tests_passed++;
+    }
+    else
+    {
+        printf("test_remove_flag: FAILED\n");
+        tests_failed++;
+    }
+
+    if (test_reveal_field())
+    {
+        printf("test_reveal_field: PASSED\n");
+        tests_passed++;
+    }
+    else
+    {
+        printf("test_reveal_field: FAILED\n");
+        tests_failed++;
+    }
+
+    if (test_count_revealed())
+    {
+        printf("test_count_revealed: PASSED\n");
+        tests_passed++;
+    }
+    else
+    {
+        printf("test_count_revealed: FAILED\n");
+        tests_failed++;
+    }
+
+    printf("Tests passed: %d\n", tests_passed);
+    printf("Tests failed: %d\n", tests_failed);
+
+    return;
+}
 void print_usage(char *name)
 {
     printf("Użycie: %s [-f filename]\n", name);
+    printf("lub:");
+    printf("Użycie: %s [-t]\n", name);
     printf("Uruchomienie gry w trybie interaktywnym: %s\n", name);
     printf("Uruchomienie gry z pliku: %s -f filename\n", name);
+    printf("Uruchomienie testów: %s -t\n", name);
     return;
 }

@@ -60,7 +60,7 @@ void flag_field(Board *board, int row, int col) // Dodano tę linijkę
     board->grid[row][col].is_flagged = !board->grid[row][col].is_flagged;
 }
 
-//usuwanie flagi
+// usuwanie flagi
 void remove_flag(Board *board, int row, int col)
 {
     if (!is_valid(board, row, col))
@@ -112,4 +112,47 @@ int count_revealed(Board *board)
 int score(Board *board, int difficulty)
 {
     return difficulty * count_revealed(board);
+}
+
+int check_reveal(Board *board, int row, int col)
+{
+    if (!is_valid(board, row, col))
+    {
+        return 0;
+    }
+    if (board->grid[row][col].is_revealed)
+    {
+        return 0;
+    }
+    return 1;
+}
+
+int check_flag(Board *board, int row, int col)
+{
+    if (!is_valid(board, row, col))
+    {
+        return 0;
+    }
+    if (board->grid[row][col].is_flagged)
+    {
+        return 0;
+    }
+    return 1;
+}
+
+int check_remove_flag(Board *board, int row, int col)
+{
+    if (!is_valid(board, row, col))
+    {
+        return 0;
+    }
+    if (board->grid[row][col].is_revealed)
+    {
+        return 0;
+    }
+    if (!board->grid[row][col].is_flagged)
+    {
+        return 0;
+    }
+    return 1;
 }

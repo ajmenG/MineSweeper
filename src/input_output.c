@@ -44,7 +44,7 @@ void print_board(Board *board)
     }
 }
 
-//zasady gry i mozliwe ruchy
+// zasady gry i mozliwe ruchy
 void rules()
 {
     printf("Zasady gry:\n");

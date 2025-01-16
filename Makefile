@@ -27,6 +27,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+# Cel testowy
+test: $(TARGET)
+	./$(TARGET) -t
+
 # Czyszczenie plików obiektowych i pliku wykonywalnego
 clean:
 	rm -f $(OBJ_DIR)/*.o $(TARGET)

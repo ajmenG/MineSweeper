@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "../include/board.h"
+#include "../include/game.h"
 
 // tworzenie planszy
 Board *board_create(int rows, int cols, int difficulty, int mines)

@@ -23,7 +23,19 @@ void reveal_all_mines(Board *board);
 // zliczanie odkrytych pól
 int count_revealed(Board *board);
 
+// usuwanie flagi
+void remove_flag(Board *board, int row, int col);
+
 // wynik gracza
 int score(Board *board, int difficulty);
+
+// sprawdzenie, czy pole można odkryć
+int check_reveal(Board *board, int row, int col);
+
+// sprawdzenie, czy pole można oznaczyć flagą
+int check_flag(Board *board, int row, int col);
+
+// sprawdzenie, czy pole można usunąć flagę
+int check_remove_flag(Board *board, int row, int col);
 
 #endif // GAME_H
