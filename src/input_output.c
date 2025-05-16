@@ -1,8 +1,11 @@
-// Funkcje czytające/wyświetlające w terminalu
+// Terminal I/O functions for the game
 #include <stdio.h>
 #include "../include/input_output.h"
 
-// wyświetlanie planszy
+/**
+ * Displays the current state of the game board
+ * @param board Pointer to the game board
+ */
 void print_board(Board *board)
 {
     printf("   ");
@@ -44,19 +47,21 @@ void print_board(Board *board)
     }
 }
 
-// zasady gry i mozliwe ruchy
+/**
+ * Displays game rules and possible commands
+ */
 void rules()
 {
-    printf("Zasady gry:\n");
-    printf("1. Gra polega na odkrywaniu pól planszy.\n");
-    printf("2. Na planszy znajdują się miny, których liczba zależy od poziomu trudności.\n");
-    printf("3. Gracz wygrywa, gdy odkryje wszystkie pola bez min.\n");
-    printf("4. Gracz przegrywa, gdy odkryje pole z miną.\n");
-    printf("5. Gracz może oznaczać pola flagą.\n");
-    printf("6. Gracz wygrywa, gdy oznaczy wszystkie miny.\n");
-    printf("7. Gracz przegrywa, gdy oznaczy pole bez miny.\n");
-    printf("8. Gracz może odkryć pole wpisując  'r' oraz współrzędne. (np. r 10 8)\n");
-    printf("9. Gracz może oznaczyć pole flagą wpisując 'f' oraz współrzędne. (np. f 10 8)\n");
-    printf("10. Gracz może usunąć flagę wpisując 'd' oraz współrzędne. (np. d 4 7)\n");
-    printf("11. Gracz może zakończyć grę w dowolnym momencie wpisując 'x'.\n\n");
+    printf("Game Rules:\n");
+    printf("1. The goal is to uncover all cells without mines.\n");
+    printf("2. The board contains mines, with the number depending on difficulty.\n");
+    printf("3. You win when you uncover all cells without mines.\n");
+    printf("4. You lose if you uncover a cell with a mine.\n");
+    printf("5. You can mark cells with flags to indicate potential mines.\n");
+    printf("6. You win if you correctly flag all mines.\n");
+    printf("7. You lose if you flag a cell without a mine.\n");
+    printf("8. To reveal a cell, type 'r' followed by coordinates (e.g., r 10 8).\n");
+    printf("9. To place a flag, type 'f' followed by coordinates (e.g., f 10 8).\n");
+    printf("10. To remove a flag, type 'd' followed by coordinates (e.g., d 4 7).\n");
+    printf("11. To exit the game at any time, type 'x'.\n\n");
 }

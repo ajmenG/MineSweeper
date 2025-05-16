@@ -1,3 +1,4 @@
+// Unit tests for the Minesweeper game
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,6 +10,10 @@
 #include "../include/scoreboard.h"
 #include "../include/tests.h"
 
+/**
+ * Tests the board_create function by verifying board properties
+ * @return 1 if test passed, 0 if failed
+ */
 int test_board_create()
 {
     Board *board = board_create(10, 10, 1, 10);
@@ -23,6 +28,10 @@ int test_board_create()
     return 1;
 }
 
+/**
+ * Tests the mine generation functionality by verifying correct mine count
+ * @return 1 if test passed, 0 if failed
+ */
 int test_generate_mines()
 {
     Board *board = board_create(10, 10, 1, 10);
@@ -45,6 +54,11 @@ int test_generate_mines()
     return 1;
 }
 
+/**
+ * Tests the neighborhood mine calculation functionality
+ * Verifies that cells in the 3x3 area around the first click have no mines
+ * @return 1 if test passed, 0 if failed
+ */
 int test_calculate_mines_in_neighborhood()
 {
     Board *board = board_create(10, 10, 1, 10);
@@ -57,6 +71,10 @@ int test_calculate_mines_in_neighborhood()
     return 1;
 }
 
+/**
+ * Tests the mine counting function for a specific cell
+ * @return 1 if test passed, 0 if failed
+ */
 int test_count_mines()
 {
     Board *board = board_create(10, 10, 1, 10);
@@ -68,6 +86,10 @@ int test_count_mines()
     return 1;
 }
 
+/**
+ * Tests the flag placement functionality
+ * @return 1 if test passed, 0 if failed
+ */
 int test_flag_field()
 {
     Board *board = board_create(10, 10, 1, 10);
@@ -79,6 +101,10 @@ int test_flag_field()
     return 1;
 }
 
+/**
+ * Tests the flag removal functionality
+ * @return 1 if test passed, 0 if failed
+ */
 int test_remove_flag()
 {
     Board *board = board_create(10, 10, 1, 10);
@@ -91,6 +117,10 @@ int test_remove_flag()
     return 1;
 }
 
+/**
+ * Tests the cell revelation functionality
+ * @return 1 if test passed, 0 if failed
+ */
 int test_reveal_field()
 {
     Board *board = board_create(10, 10, 1, 10);
@@ -102,6 +132,10 @@ int test_reveal_field()
     return 1;
 }
 
+/**
+ * Tests the revealed cells counting functionality
+ * @return 1 if test passed, 0 if failed
+ */
 int test_count_revealed()
 {
     Board *board = board_create(10, 10, 1, 10);

@@ -7,7 +7,7 @@
 #include "input_output.h"
 #include "scoreboard.h"
 
-// testy planszy
+// Board testing functions
 int test_board_create();
 
 int test_generate_mines();

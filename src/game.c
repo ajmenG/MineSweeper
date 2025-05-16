@@ -1,4 +1,4 @@
-// Główna logika rozgrywki (pętla, obróbka ruchów)
+// Main game logic (game loop, move processing)
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -6,13 +6,25 @@
 
 int revealed = 0;
 
-// sprawdzenie, czy pole jest na planszy
+/**
+ * Checks if coordinates are within board boundaries
+ * @param board Pointer to the game board
+ * @param row Row coordinate
+ * @param col Column coordinate
+ * @return 1 if coordinates are valid, 0 otherwise
+ */
 int is_valid(Board *board, int row, int col)
 {
     return row >= 0 && row < board->rows && col >= 0 && col < board->cols;
 }
 
-// odkrycie pola
+/**
+ * Reveals a cell at specified coordinates
+ * @param board Pointer to the game board
+ * @param row Row coordinate
+ * @param col Column coordinate
+ * @return 1 if cell was revealed, 0 otherwise
+ */
 int reveal_field(Board *board, int row, int col)
 {
     if (!is_valid(board, row, col))
@@ -46,8 +58,13 @@ int reveal_field(Board *board, int row, int col)
     return 1;
 }
 
-// oznaczenie pola flagą
-void flag_field(Board *board, int row, int col) // Dodano tę linijkę
+/**
+ * Places or toggles a flag at specified coordinates
+ * @param board Pointer to the game board
+ * @param row Row coordinate
+ * @param col Column coordinate
+ */
+void flag_field(Board *board, int row, int col)
 {
     if (!is_valid(board, row, col))
     {
@@ -60,7 +77,12 @@ void flag_field(Board *board, int row, int col) // Dodano tę linijkę
     board->grid[row][col].is_flagged = !board->grid[row][col].is_flagged;
 }
 
-// usuwanie flagi
+/**
+ * Removes a flag from specified coordinates
+ * @param board Pointer to the game board
+ * @param row Row coordinate
+ * @param col Column coordinate
+ */
 void remove_flag(Board *board, int row, int col)
 {
     if (!is_valid(board, row, col))
@@ -74,7 +96,10 @@ void remove_flag(Board *board, int row, int col)
     board->grid[row][col].is_flagged = 0;
 }
 
-// przegrana
+/**
+ * Reveals all mines on the board (game over)
+ * @param board Pointer to the game board
+ */
 void reveal_all_mines(Board *board)
 {
     for (int i = 0; i < board->rows; i++)
@@ -91,7 +116,11 @@ void reveal_all_mines(Board *board)
     fail = 1;
 }
 
-// ile odkrytych pól
+/**
+ * Counts the number of revealed cells on the board
+ * @param board Pointer to the game board
+ * @return Number of revealed cells
+ */
 int count_revealed(Board *board)
 {
     revealed = 0;
@@ -108,12 +137,24 @@ int count_revealed(Board *board)
     return revealed;
 }
 
-// wynik
+/**
+ * Calculates player's score based on revealed cells and difficulty
+ * @param board Pointer to the game board
+ * @param difficulty Game difficulty level
+ * @return Player's score
+ */
 int score(Board *board, int difficulty)
 {
     return difficulty * count_revealed(board);
 }
 
+/**
+ * Checks if a cell can be revealed
+ * @param board Pointer to the game board
+ * @param row Row coordinate
+ * @param col Column coordinate
+ * @return 1 if cell can be revealed, 0 otherwise
+ */
 int check_reveal(Board *board, int row, int col)
 {
     if (!is_valid(board, row, col))
@@ -127,6 +168,13 @@ int check_reveal(Board *board, int row, int col)
     return 1;
 }
 
+/**
+ * Checks if a cell can be flagged
+ * @param board Pointer to the game board
+ * @param row Row coordinate
+ * @param col Column coordinate
+ * @return 1 if cell can be flagged, 0 otherwise
+ */
 int check_flag(Board *board, int row, int col)
 {
     if (!is_valid(board, row, col))
@@ -140,6 +188,13 @@ int check_flag(Board *board, int row, int col)
     return 1;
 }
 
+/**
+ * Checks if a flag can be removed from a cell
+ * @param board Pointer to the game board
+ * @param row Row coordinate
+ * @param col Column coordinate
+ * @return 1 if flag can be removed, 0 otherwise
+ */
 int check_remove_flag(Board *board, int row, int col)
 {
     if (!is_valid(board, row, col))

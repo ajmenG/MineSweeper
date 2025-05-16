@@ -8,34 +8,34 @@ extern int run;
 
 extern int fail;
 
-// sprawdzenie, czy pole jest na planszy
+// Validates if coordinates are within the board boundaries
 int is_valid(Board *board, int row, int col);
 
-// odkrycie pola
+// Reveals a cell at the specified coordinates
 int reveal_field(Board *board, int row, int col);
 
-// oznaczenie pola flagą
+// Places a flag at the specified coordinates
 void flag_field(Board *board, int row, int col);
 
-// odkrywanie wszystkich min
+// Reveals all mines on the board (typically at game end)
 void reveal_all_mines(Board *board);
 
-// zliczanie odkrytych pól
+// Counts the total number of revealed cells
 int count_revealed(Board *board);
 
-// usuwanie flagi
+// Removes a flag from the specified coordinates
 void remove_flag(Board *board, int row, int col);
 
-// wynik gracza
+// Calculates the player's score based on game state and difficulty
 int score(Board *board, int difficulty);
 
-// sprawdzenie, czy pole można odkryć
+// Checks if a cell at the specified coordinates can be revealed
 int check_reveal(Board *board, int row, int col);
 
-// sprawdzenie, czy pole można oznaczyć flagą
+// Checks if a cell at the specified coordinates can be flagged
 int check_flag(Board *board, int row, int col);
 
-// sprawdzenie, czy pole można usunąć flagę
+// Checks if a flag can be removed from the specified coordinates
 int check_remove_flag(Board *board, int row, int col);
 
 #endif // GAME_H

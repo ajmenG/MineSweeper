@@ -1,4 +1,4 @@
-// Obsługa trybu wczytywania z pliku (flaga -f)
+// File input handler (for -f mode)
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,21 +6,26 @@
 #include "../include/board.h"
 #include "../include/game.h"
 
-// funkcja do parsowania pliku wejściowego i zapisania danych do struktury planszy
+/**
+ * Reads game configuration and commands from an input file
+ * @param filename Path to the input file
+ * @param fail Flag indicating if the game is in failed state
+ */
 void read_file(char *filename, int fail)
 {
     FILE *file = fopen(filename, "r");
     if (file == NULL)
     {
-        printf("Nie udało się otworzyć pliku\n");
+        printf("Failed to open file\n");
         exit(EXIT_FAILURE);
     }
 
-    // tworzenie planszy o podanych rozmiarach, trudności oraz liczbie min
+    // Create board with specified dimensions, difficulty, and mine count
     int rows, cols, difficulty, mines;
     fscanf(file, " %d %d %d %d", &rows, &cols, &difficulty, &mines);
     Board *board = board_create(rows, cols, difficulty, mines);
 
+    // Read mine positions from the file
     for (int i = 0; i < board->rows; i++)
     {
         for (int j = 0; j < board->cols; j++)
@@ -41,6 +46,7 @@ void read_file(char *filename, int fail)
 
     calculate_mines_in_neighborhood(board);
 
+    // Process commands from the file
     char command;
     int x, y;
     int valid_commands = 0;
@@ -50,7 +56,6 @@ void read_file(char *filename, int fail)
         switch (command)
         {
         case 'f':
-
             if (check_flag(board, x - 1, y - 1) == 1 && fail == 0)
             {
                 valid_commands++;
@@ -74,11 +79,12 @@ void read_file(char *filename, int fail)
         }
     }
 
-    printf("Liczba poprawnych komend: %d\n", valid_commands);
-    printf("Wynik gracza: %d\n", score(board, difficulty));
-    printf("Czy gracz wygrał? : %d\n", score(board, difficulty) == board->rows * board->cols - board->mine_count ? 1 : 0);
+    printf("Valid commands executed: %d\n", valid_commands);
+    printf("Player's score: %d\n", score(board, difficulty));
+    printf("Player won: %s\n",
+           score(board, difficulty) == board->rows * board->cols - board->mine_count ? "Yes" : "No");
 
     fclose(file);
-    printf("Udało się wczytać plik\n");
+    printf("File successfully processed\n");
     return;
 }
