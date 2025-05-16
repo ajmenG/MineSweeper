@@ -1,4 +1,4 @@
-// Główny plik, parsuje argumenty, uruchamia grę
+// Main file - parses command line arguments and runs the game
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -16,18 +16,24 @@
 
 extern int revealed;
 
+// Flag indicating if the game is running
 int run = 1;
 
+// Flag indicating if the game has been failed
 int fail = 0;
 
+// Function prototypes
 int interactive_mode();
-
-void file_mode();
-
+void file_mode(char *filename);
 void test_mode();
-
 void print_usage(char *name);
 
+/**
+ * Main function - parses command line arguments and runs the appropriate mode
+ * @param argc Number of command line arguments
+ * @param argv Array of command line arguments
+ * @return EXIT_SUCCESS on success, EXIT_FAILURE on failure
+ */
 int main(int argc, char *argv[])
 {
     int opt;
@@ -40,7 +46,7 @@ int main(int argc, char *argv[])
         {
         case 'f':
             filename = optarg;
-            printf("Nazwa pliku: %s\n", filename);
+            printf("Filename: %s\n", filename);
             file_mode(filename);
             flag_found = 1;
             break;
@@ -65,12 +71,16 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+/**
+ * Interactive mode - runs the game in interactive mode
+ * @return 0 on success, -1 on failure
+ */
 int interactive_mode()
 {
     rules();
 
     int rows, cols, difficulty, mines;
-    printf("Podaj poziom trudności (1-3) lub 4 (własny): ");
+    printf("Select difficulty level (1-3) or 4 (custom): ");
     scanf("%d", &difficulty);
 
     switch (difficulty)
@@ -91,47 +101,47 @@ int interactive_mode()
         mines = 99;
         break;
     case 4:
-        printf("Podaj liczbę wierszy: ");
+        printf("Enter number of rows: ");
         scanf("%d", &rows);
-        printf("Podaj liczbę kolumn: ");
+        printf("Enter number of columns: ");
         scanf("%d", &cols);
-        printf("Podaj liczbę min: ");
+        printf("Enter number of mines: ");
         scanf("%d", &mines);
         break;
     }
 
     if (mines >= rows * cols)
     {
-        printf("Za dużo min\n");
+        printf("Too many mines\n");
         return -1;
     }
 
     if (difficulty < 1 || difficulty > 4)
     {
-        printf("Niepoprawny poziom trudności\n");
+        printf("Invalid difficulty level\n");
         return -1;
     }
 
     Board *board = board_create(rows, cols, difficulty, mines);
     print_board(board);
 
-    int licznik = 0;
+    int move_counter = 0;
 
     while (run)
     {
         char command;
         int x, y;
 
-        printf("Podaj komendę: ");
-        if (scanf(" %c", &command) != 1) // Sprawdzenie, czy wczytano komendę
+        printf("Enter command: ");
+        if (scanf(" %c", &command) != 1) // Check if command was read
         {
-            printf("Niepoprawna komenda\n");
+            printf("Invalid command\n");
             while (getchar() != '\n')
-                ; // Wyczyść bufor wejściowy
+                ; // Clear input buffer
             continue;
         }
 
-        if (command == 'x') // Sprawdzenie komendy 'x' przed wczytaniem współrzędnych
+        if (command == 'x') // Check 'x' command before reading coordinates
         {
             fail = 1;
             run = 0;
@@ -140,30 +150,30 @@ int interactive_mode()
 
         if (command == 'f' || command == 'd' || command == 'r')
         {
-            if (scanf("%d %d", &x, &y) != 2) // Sprawdzenie, czy wczytano dwie współrzędne
+            if (scanf("%d %d", &x, &y) != 2) // Check if two coordinates were read
             {
-                printf("Brak współrzędnych\n");
+                printf("Missing coordinates\n");
                 while (getchar() != '\n')
-                    ; // Wyczyść bufor wejściowy
+                    ; // Clear input buffer
                 continue;
             }
 
             if (x < 1 || x > rows || y < 1 || y > cols)
             {
-                printf("Niepoprawne współrzędne\n");
+                printf("Invalid coordinates\n");
                 continue;
             }
 
-            if (licznik == 0)
+            if (move_counter == 0)
             {
                 generate_mines(board, x - 1, y - 1);
                 calculate_mines_in_neighborhood(board);
             }
-            licznik++;
+            move_counter++;
         }
         else
         {
-            printf("Niepoprawna komenda\n");
+            printf("Invalid command\n");
             continue;
         }
 
@@ -186,37 +196,37 @@ int interactive_mode()
         {
             run = 0;
         }
-        printf("Aktualny wynik: %d\n", score(board, difficulty));
+        printf("Current score: %d\n", score(board, difficulty));
     }
 
     if (fail)
     {
-        printf("Przegrałeś!!!!!\n");
+        printf("Game over! You lost!\n");
     }
     else
     {
-        printf("Wygrałeś!!!, gratulacje\n");
+        printf("Congratulations! You won!\n");
     }
 
-    printf("Twój wynik to: %d\n\n", score(board, difficulty));
+    printf("Your final score: %d\n\n", score(board, difficulty));
 
-    char odp;
+    char answer;
     char nickname[20];
-    printf("Czy chcesz zapisać wynik? (t/n): ");
-    scanf(" %c", &odp);
-    switch (odp)
+    printf("Do you want to save your score? (y/n): ");
+    scanf(" %c", &answer);
+    switch (answer)
     {
-    case 't':
-        printf("Podaj nick: ");
+    case 'y':
+        printf("Enter your nickname: ");
         scanf("%s", nickname);
         save_score(nickname, score(board, difficulty));
-        printf("Dziękujemy za grę\n\n");
+        printf("Thank you for playing!\n\n");
         break;
     case 'n':
-        printf("Dziękujemy za grę\n\n");
+        printf("Thank you for playing!\n\n");
         break;
     default:
-        printf("Niepoprawna komenda\n");
+        printf("Invalid command\n");
         break;
     }
 
@@ -225,12 +235,19 @@ int interactive_mode()
     return 0;
 }
 
+/**
+ * File mode - runs the game from a file
+ * @param filename Name of the file to read
+ */
 void file_mode(char *filename)
 {
     read_file(filename, fail);
     return;
 }
 
+/**
+ * Test mode - runs all tests
+ */
 void test_mode()
 {
     int tests_passed = 0;
@@ -330,13 +347,18 @@ void test_mode()
 
     return;
 }
+
+/**
+ * Prints usage information
+ * @param name Name of the program
+ */
 void print_usage(char *name)
 {
-    printf("Użycie: %s [-f filename]\n", name);
-    printf("lub:");
-    printf("Użycie: %s [-t]\n", name);
-    printf("Uruchomienie gry w trybie interaktywnym: %s\n", name);
-    printf("Uruchomienie gry z pliku: %s -f filename\n", name);
-    printf("Uruchomienie testów: %s -t\n", name);
+    printf("Usage: %s [-f filename]\n", name);
+    printf("or:\n");
+    printf("Usage: %s [-t]\n", name);
+    printf("Run game in interactive mode: %s\n", name);
+    printf("Run game from file: %s -f filename\n", name);
+    printf("Run tests: %s -t\n", name);
     return;
 }

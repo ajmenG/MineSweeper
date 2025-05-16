@@ -1,45 +1,45 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-// pojedyncza komórka planszy
+// Individual cell of the board
 typedef struct
 {
-    // czy komórka jest miną
+    // Indicates if the cell contains a mine
     int is_mine;
-    // czy komórka jest odkryta
+    // Indicates if the cell has been revealed by the player
     int is_revealed;
-    // czy komórka jest oznaczona
+    // Indicates if the cell has been flagged by the player
     int is_flagged;
-    // liczba min w sąsiedztwie 3x3 od pola
+    // Number of mines in the 3x3 neighborhood around this cell
     int mines_in_neighborhood;
 } Cell;
 
-// plansza
+// Game board structure
 typedef struct
 {
-    // liczba wierszy
+    // Number of rows on the board
     int rows;
-    // liczba kolumn
+    // Number of columns on the board
     int cols;
-    // poziom trudności
+    // Difficulty level of the game
     int difficulty;
-    // plansza
+    // 2D grid of cells
     Cell **grid;
-    // liczba min
+    // Total number of mines on the board
     int mine_count;
 
 } Board;
 
-// tworzenie planszy
+// Creates a new game board with specified dimensions and mine count
 Board *board_create(int rows, int cols, int difficulty, int mines);
 
-// generowanie min
+// Randomly distributes mines across the board, avoiding the specified cell
 void generate_mines(Board *board, int row, int col);
 
-// obliczanie wszystkich min w sasiedztwie kazdego pola
+// Calculates the number of neighboring mines for each cell on the board
 int calculate_mines_in_neighborhood(Board *board);
 
-// zliczanie min w sasiedztwie pola
+// Counts the number of mines in the 3x3 neighborhood of a specific cell
 int count_mines(Board *board, int row, int col);
 
 #endif // BOARD_H

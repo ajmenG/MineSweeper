@@ -5,18 +5,22 @@
 #include "board.h"
 #include "input_output.h"
 
-typedef struct {
+typedef struct
+{
     char name[50];
     int score;
 } ScoreEntry;
 
-// zapisywanie wyniku do pliku
+// Saves player score to a file
 void save_score(char *nickname, int score);
 
+// Loads scores from file into the provided array
 void load_scores(ScoreEntry scores[MAX_SCORES], int *count);
 
+// Displays the leaderboard with top scores
 void display_scores();
 
+// Comparison function for sorting scores
 int compare_scores(const void *a, const void *b);
 
 #endif // SCOREBOARD_H
