@@ -1,12 +1,5 @@
-tt 54
-t 0
-2 0
-43 41
-yt 52
-aiman 43
-cyprian 136
-cyprian2 39920
-aiman 64
-aiman 39996
-aiman 272
-aiman 250
+Aiman 13980
+Cyprian 12769
+TomCat 2331
+JerryMouse 1332
+SpoongeBob 2785
